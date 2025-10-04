@@ -1,0 +1,20 @@
+{
+  "products": [
+    {
+      "name": "Buku Parenting Digital",
+      "image": "https://source.unsplash.com/400x400/?book,parenting"
+    },
+    {
+      "name": "Jam Tangan Keren",
+      "image": "https://source.unsplash.com/400x400/?watch"
+    },
+    {
+      "name": "Baju Anak Premium",
+      "image": "https://source.unsplash.com/400x400/?kids,clothes"
+    },
+    {
+      "name": "Sepatu Couple Family",
+      "image": "https://source.unsplash.com/400x400/?family,shoes"
+    }
+  ]
+}
