@@ -3,14 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery Mbun</title>
+  <title>Gallery Mbun | Toko Kreatif & Koleksi Terbaik</title>
+  <meta name="description" content="Gallery Mbun - Toko kreatif yang menyediakan koleksi produk pilihan berkualitas dengan harga terjangkau. Temukan pengalaman belanja yang nyaman dan memuaskan di Mojokerto.">
+  <link rel="icon" type="image/png" href="favicon.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <!-- === HEADER / NAVBAR === -->
   <header>
     <div class="container nav">
-      <div class="logo">Gallery Mbun</div>
+      <div class="logo">
+        <img src="logo.png" alt="Logo Gallery Mbun" height="40" style="vertical-align: middle; margin-right:8px;">
+        <span>Gallery Mbun</span>
+      </div>
       <nav>
         <ul>
           <li><a href="#home">Beranda</a></li>
@@ -25,8 +30,8 @@
   <!-- === BANNER === -->
   <section id="home" class="banner">
     <div class="banner-text">
-      <h1>Selamat Datang di Gallery Mbun</h1>
-      <p>Temukan koleksi terbaik kami dengan harga spesial</p>
+      <h1>Selamat Datang di <span style="color:#F39C12;">Gallery Mbun</span></h1>
+      <p>Temukan koleksi terbaik kami dengan harga spesial untuk Anda</p>
       <a href="#products" class="btn">Lihat Produk</a>
     </div>
   </section>
@@ -35,7 +40,7 @@
   <section id="products" class="products">
     <div class="container">
       <h2>Koleksi Produk</h2>
-      <div id="product-gallery" class="product-grid">
+      <div id="product-gallery" class="product-grid" aria-live="polite" tabindex="0">
         <!-- Produk dari app.js akan muncul di sini -->
       </div>
     </div>
@@ -46,10 +51,13 @@
     <div class="container">
       <h2>Tentang Kami</h2>
       <p>
-        Gallery Mbun adalah toko kreatif yang menyediakan berbagai produk pilihan
-        berkualitas dengan harga terjangkau. Kami hadir untuk memberi pengalaman
-        belanja yang nyaman dan memuaskan.
+        <strong>Gallery Mbun</strong> adalah toko kreatif yang berkomitmen menyediakan produk berkualitas dan unik dengan harga terjangkau. Kami hadir untuk memberi pengalaman belanja yang nyaman, aman, dan memuaskan bagi pelanggan di seluruh Indonesia.
       </p>
+      <ul>
+        <li>✔️ Produk berkualitas, harga bersaing</li>
+        <li>✔️ Layanan ramah & responsif</li>
+        <li>✔️ Pengiriman cepat & aman</li>
+      </ul>
     </div>
   </section>
 
@@ -57,19 +65,24 @@
   <section id="contact" class="contact">
     <div class="container">
       <h2>Hubungi Kami</h2>
-      <p>Ingin order atau tanya-tanya? Silakan hubungi kontak kami:</p>
+      <p>Ingin order atau tanya-tanya? Silakan hubungi kami melalui:</p>
       <ul>
-        <li>📞 WA: 08xx-xxxx-xxxx</li>
-        <li>📧 Email: gallerymbun@gmail.com</li>
-        <li>📍 Alamat: Jl. Pekayon No.39, Kota Mojokerto</li>
+        <li>📞 <a href="https://wa.me/628xxxxxxxxxx" target="_blank" rel="noopener">WhatsApp: 08xx-xxxx-xxxx</a></li>
+        <li>📧 <a href="mailto:gallerymbun@gmail.com">gallerymbun@gmail.com</a></li>
+        <li>📍 <a href="https://goo.gl/maps/6vXXXXXXXXX" target="_blank" rel="noopener">Jl. Pekayon No.39, Kota Mojokerto</a></li>
       </ul>
+      <div class="social-media">
+        <a href="https://instagram.com/gallerymbun" target="_blank" rel="noopener" aria-label="Instagram Gallery Mbun"><img src="ig-icon.png" alt="Instagram" height="24"></a>
+        <a href="https://facebook.com/gallerymbun" target="_blank" rel="noopener" aria-label="Facebook Gallery Mbun"><img src="fb-icon.png" alt="Facebook" height="24"></a>
+      </div>
     </div>
   </section>
 
   <!-- === FOOTER === -->
   <footer>
     <div class="container">
-      <p>&copy; 2025 Gallery Mbun. All rights reserved.</p>
+      <p>&copy; 2025 <strong>Gallery Mbun</strong>. All rights reserved.<br>
+        Dibuat dengan <span style="color:#e25555;">&#10084;</span> di Mojokerto.</p>
     </div>
   </footer>
 
