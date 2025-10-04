@@ -1,50 +1,76 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery Mbun</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- HEADER -->
-  <header class="navbar">
-    <div class="logo">
-      <img src="assets/images/logo.png" alt="Gallery Mbun" />
-      <h1>Gallery Mbun</h1>
+  <!-- === HEADER / NAVBAR === -->
+  <header>
+    <div class="container nav">
+      <div class="logo">Gallery Mbun</div>
+      <nav>
+        <ul>
+          <li><a href="#home">Beranda</a></li>
+          <li><a href="#products">Produk</a></li>
+          <li><a href="#about">Tentang</a></li>
+          <li><a href="#contact">Kontak</a></li>
+        </ul>
+      </nav>
     </div>
-    <nav>
-      <ul>
-        <li><a href="#">Beranda</a></li>
-        <li><a href="#">Produk</a></li>
-        <li><a href="#">Promo</a></li>
-        <li><a href="#">Kontak</a></li>
-      </ul>
-    </nav>
   </header>
 
-  <!-- HERO SECTION -->
-  <section class="hero">
-    <div class="hero-content">
-      <h2>Selamat datang, Bunda & Ayah ✨</h2>
-      <p>Temukan produk pilihan, worksheet parenting gratis, hingga fashion keren di sini 💕</p>
-      <a href="#produk" class="btn-primary">Jelajahi Produk</a>
+  <!-- === BANNER === -->
+  <section id="home" class="banner">
+    <div class="banner-text">
+      <h1>Selamat Datang di Gallery Mbun</h1>
+      <p>Temukan koleksi terbaik kami dengan harga spesial</p>
+      <a href="#products" class="btn">Lihat Produk</a>
     </div>
   </section>
 
-  <!-- PRODUK -->
-  <main>
-    <section id="produk" class="produk-section">
-      <h2>Produk Unggulan</h2>
-      <div id="produkList" class="produk-list">
-        <!-- Produk akan dimuat dari app.js -->
+  <!-- === PRODUK === -->
+  <section id="products" class="products">
+    <div class="container">
+      <h2>Koleksi Produk</h2>
+      <div id="product-gallery" class="product-grid">
+        <!-- Produk dari app.js akan muncul di sini -->
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <!-- FOOTER -->
+  <!-- === TENTANG === -->
+  <section id="about" class="about">
+    <div class="container">
+      <h2>Tentang Kami</h2>
+      <p>
+        Gallery Mbun adalah toko kreatif yang menyediakan berbagai produk pilihan
+        berkualitas dengan harga terjangkau. Kami hadir untuk memberi pengalaman
+        belanja yang nyaman dan memuaskan.
+      </p>
+    </div>
+  </section>
+
+  <!-- === KONTAK === -->
+  <section id="contact" class="contact">
+    <div class="container">
+      <h2>Hubungi Kami</h2>
+      <p>Ingin order atau tanya-tanya? Silakan hubungi kontak kami:</p>
+      <ul>
+        <li>📞 WA: 08xx-xxxx-xxxx</li>
+        <li>📧 Email: gallerymbun@gmail.com</li>
+        <li>📍 Alamat: Jl. Pekayon No.39, Kota Mojokerto</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- === FOOTER === -->
   <footer>
-    <p>© 2025 Gallery Mbun - Semua Hak Cipta Dilindungi</p>
+    <div class="container">
+      <p>&copy; 2025 Gallery Mbun. All rights reserved.</p>
+    </div>
   </footer>
 
   <script src="config.js"></script>
