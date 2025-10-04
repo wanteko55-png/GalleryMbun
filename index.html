@@ -5,18 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery Mbun | Toko Kreatif & Koleksi Terbaik</title>
   <meta name="description" content="Gallery Mbun - Toko kreatif yang menyediakan koleksi produk pilihan berkualitas dengan harga terjangkau. Temukan pengalaman belanja yang nyaman dan memuaskan di Mojokerto.">
-  <link rel="icon" type="image/png" href="favicon.png">
+  <!-- SEO: Open Graph -->
+  <meta property="og:title" content="Gallery Mbun | Toko Kreatif & Koleksi Terbaik">
+  <meta property="og:description" content="Temukan pengalaman belanja yang nyaman dan koleksi terbaik hanya di Gallery Mbun.">
+  <meta property="og:image" content="assets/img/banner.webp">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://gallerymbun.com">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
   <!-- === HEADER / NAVBAR === -->
   <header>
     <div class="container nav">
-      <div class="logo">
-        <img src="logo.png" alt="Logo Gallery Mbun" height="40" style="vertical-align: middle; margin-right:8px;">
+      <a class="logo" href="#home">
+        <img src="assets/img/logo.webp" alt="Logo Gallery Mbun" height="40">
         <span>Gallery Mbun</span>
-      </div>
+      </a>
       <nav>
+        <button class="nav-toggle" aria-label="Buka navigasi">&#9776;</button>
         <ul>
           <li><a href="#home">Beranda</a></li>
           <li><a href="#products">Produk</a></li>
@@ -28,31 +37,42 @@
   </header>
 
   <!-- === BANNER === -->
-  <section id="home" class="banner">
+  <section id="home" class="banner" aria-label="Banner Utama">
     <div class="banner-text">
-      <h1>Selamat Datang di <span style="color:#F39C12;">Gallery Mbun</span></h1>
+      <h1>Selamat Datang di <span class="highlight">Gallery Mbun</span></h1>
       <p>Temukan koleksi terbaik kami dengan harga spesial untuk Anda</p>
       <a href="#products" class="btn">Lihat Produk</a>
     </div>
   </section>
 
   <!-- === PRODUK === -->
-  <section id="products" class="products">
+  <section id="products" class="products" aria-label="Produk Unggulan">
     <div class="container">
       <h2>Koleksi Produk</h2>
       <div id="product-gallery" class="product-grid" aria-live="polite" tabindex="0">
-        <!-- Produk dari app.js akan muncul di sini -->
+        <!-- Contoh produk statis, produk dinamis bisa dari JS -->
+        <div class="product-card">
+          <img src="assets/img/produk1.webp" alt="Produk 1 - Dompet Kulit Handmade" loading="lazy">
+          <h3>Dompet Kulit Handmade</h3>
+          <p>Dompet kulit asli, awet & stylish</p>
+          <span class="price">Rp150.000</span>
+        </div>
+        <div class="product-card">
+          <img src="assets/img/produk2.webp" alt="Produk 2 - Tas Rajut Premium" loading="lazy">
+          <h3>Tas Rajut Premium</h3>
+          <p>Tas rajut buatan tangan, model kekinian</p>
+          <span class="price">Rp200.000</span>
+        </div>
+        <!-- Tambahkan lebih banyak produk sesuai kebutuhan -->
       </div>
     </div>
   </section>
 
   <!-- === TENTANG === -->
-  <section id="about" class="about">
+  <section id="about" class="about" aria-label="Tentang Gallery Mbun">
     <div class="container">
       <h2>Tentang Kami</h2>
-      <p>
-        <strong>Gallery Mbun</strong> adalah toko kreatif yang berkomitmen menyediakan produk berkualitas dan unik dengan harga terjangkau. Kami hadir untuk memberi pengalaman belanja yang nyaman, aman, dan memuaskan bagi pelanggan di seluruh Indonesia.
-      </p>
+      <p><strong>Gallery Mbun</strong> adalah toko kreatif yang berkomitmen menyediakan produk berkualitas dan unik dengan harga terjangkau. Kami hadir untuk memberi pengalaman belanja yang nyaman, aman, dan memuaskan.</p>
       <ul>
         <li>✔️ Produk berkualitas, harga bersaing</li>
         <li>✔️ Layanan ramah & responsif</li>
@@ -61,8 +81,25 @@
     </div>
   </section>
 
+  <!-- === TESTIMONI (opsional) === -->
+  <section id="testimoni" class="testimoni" aria-label="Testimoni Pelanggan">
+    <div class="container">
+      <h2>Testimoni Pelanggan</h2>
+      <div class="testimoni-list">
+        <blockquote>
+          <p>"Pelayanan ramah, barangnya keren banget!"</p>
+          <footer>- Andi, Mojokerto</footer>
+        </blockquote>
+        <blockquote>
+          <p>"Produk sesuai gambar, pengiriman cepat. Recommended!"</p>
+          <footer>- Sinta, Surabaya</footer>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
   <!-- === KONTAK === -->
-  <section id="contact" class="contact">
+  <section id="contact" class="contact" aria-label="Hubungi Kami">
     <div class="container">
       <h2>Hubungi Kami</h2>
       <p>Ingin order atau tanya-tanya? Silakan hubungi kami melalui:</p>
@@ -72,8 +109,12 @@
         <li>📍 <a href="https://goo.gl/maps/6vXXXXXXXXX" target="_blank" rel="noopener">Jl. Pekayon No.39, Kota Mojokerto</a></li>
       </ul>
       <div class="social-media">
-        <a href="https://instagram.com/gallerymbun" target="_blank" rel="noopener" aria-label="Instagram Gallery Mbun"><img src="ig-icon.png" alt="Instagram" height="24"></a>
-        <a href="https://facebook.com/gallerymbun" target="_blank" rel="noopener" aria-label="Facebook Gallery Mbun"><img src="fb-icon.png" alt="Facebook" height="24"></a>
+        <a href="https://instagram.com/gallerymbun" target="_blank" rel="noopener" aria-label="Instagram Gallery Mbun">
+          <img src="assets/img/ig-icon.svg" alt="Instagram" height="24">
+        </a>
+        <a href="https://facebook.com/gallerymbun" target="_blank" rel="noopener" aria-label="Facebook Gallery Mbun">
+          <img src="assets/img/fb-icon.svg" alt="Facebook" height="24">
+        </a>
       </div>
     </div>
   </section>
@@ -85,8 +126,14 @@
         Dibuat dengan <span style="color:#e25555;">&#10084;</span> di Mojokerto.</p>
     </div>
   </footer>
-
-  <script src="config.js"></script>
-  <script src="app.js"></script>
+  <!-- JS -->
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+  <script>
+    // Hamburger menu JS
+    document.querySelector('.nav-toggle').onclick = function() {
+      document.querySelector('nav ul').classList.toggle('show');
+    };
+  </script>
 </body>
 </html>
