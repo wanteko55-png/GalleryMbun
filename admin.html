@@ -1,137 +1,224 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin | Gallery Mbun</title>
-  <meta name="description" content="Panel Admin Gallery Mbun - Kelola produk, pesanan, dan profil dengan mudah.">
-  <link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/css/style.css">
-  <link rel="stylesheet" href="../assets/css/admin.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Panel — Gallery Mbun</title>
+  <meta name="description" content="Dashboard admin Gallery Mbun — kelola produk, banner, kontak, dan transaksi." />
+  <link rel="icon" href="assets/img/logo.webp" />
+  <!-- gunakan style utama + admin khusus -->
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
-  <header class="admin-header">
-    <div class="container admin-nav">
-      <a class="logo" href="../index.html">
-        <img src="../assets/img/logo.webp" alt="Gallery Mbun" height="38">
-        <span>Dashboard Admin</span>
-      </a>
-      <nav>
-        <button class="nav-toggle">&#9776;</button>
-        <ul>
-          <li><a href="#dashboard" class="active">Dashboard</a></li>
-          <li><a href="#produk">Produk</a></li>
-          <li><a href="#transaksi">Transaksi</a></li>
-          <li><a href="#profil">Profil</a></li>
-          <li><a href="#logout" class="logout">Logout</a></li>
-        </ul>
-      </nav>
+
+  <!-- Top bar -->
+  <header class="navbar" style="position:relative;">
+    <div class="container" style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;gap:12px;align-items:center;">
+        <img src="assets/img/logo.webp" alt="logo" style="height:36px;border-radius:6px;">
+        <div style="font-weight:700">Gallery Mbun — Admin</div>
+      </div>
+
+      <div id="admin-actions" style="display:flex;gap:12px;align-items:center;">
+        <div id="admin-logged" style="display:none;align-items:center;gap:10px;">
+          <span id="adminEmailLabel"></span>
+          <button class="btn" id="btnLogout">Logout</button>
+        </div>
+        <div id="admin-login-area">
+          <button class="btn" id="btnOpenLogin">Login Admin</button>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main id="admin-content" class="container">
-    <!-- === DASHBOARD === -->
-    <section id="dashboard" class="admin-section">
-      <h2>Selamat Datang, <span id="admin-name">Admin Gallery Mbun</span></h2>
-      <p>Kelola semua aktivitas toko Anda dengan mudah.</p>
-      <div class="stats-grid">
-        <div class="stat-card">
-          <h3>Total Produk</h3>
-          <p id="stat-produk">0</p>
-        </div>
-        <div class="stat-card">
-          <h3>Pesanan Baru</h3>
-          <p id="stat-order">0</p>
-        </div>
-        <div class="stat-card">
-          <h3>Pelanggan</h3>
-          <p id="stat-user">0</p>
-        </div>
-      </div>
-    </section>
+  <main class="container" style="padding:28px 4%;">
+    <!-- SIDEBAR + CONTENT -->
+    <div class="admin-layout">
+      <aside class="admin-sidebar">
+        <nav>
+          <ul>
+            <li><a href="#dash" class="admin-link active" data-target="dash">Dashboard</a></li>
+            <li><a href="#products" class="admin-link" data-target="products">Produk</a></li>
+            <li><a href="#banner" class="admin-link" data-target="banner">Banner & Logo</a></li>
+            <li><a href="#contact" class="admin-link" data-target="contact">Kontak & Info</a></li>
+            <li><a href="#orders" class="admin-link" data-target="orders">Transaksi</a></li>
+            <li><a href="#settings" class="admin-link" data-target="settings">Pengaturan</a></li>
+          </ul>
+        </nav>
+      </aside>
 
-    <!-- === PRODUK === -->
-    <section id="produk" class="admin-section hidden">
-      <h2>Manajemen Produk</h2>
-      <button class="btn" id="btnTambahProduk">+ Tambah Produk</button>
-      <table class="admin-table" id="produkTable">
-        <thead>
-          <tr>
-            <th>Gambar</th>
-            <th>Nama Produk</th>
-            <th>Harga</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data produk dinamis -->
-        </tbody>
-      </table>
-    </section>
+      <section class="admin-main">
 
-    <!-- === TRANSAKSI === -->
-    <section id="transaksi" class="admin-section hidden">
-      <h2>Daftar Transaksi</h2>
-      <table class="admin-table" id="transaksiTable">
-        <thead>
-          <tr>
-            <th>ID Pesanan</th>
-            <th>Nama Pembeli</th>
-            <th>Produk</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Data transaksi dinamis -->
-        </tbody>
-      </table>
-    </section>
+        <!-- DASHBOARD -->
+        <section id="dash" class="panel">
+          <h2>Selamat datang, <span id="adminName">Admin</span></h2>
+          <p>Ringkasan singkat operasional toko.</p>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-title">Total Produk</div>
+              <div id="statTotalProduk" class="stat-value">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Pesanan Baru</div>
+              <div id="statOrders" class="stat-value">0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Pelanggan Terdaftar</div>
+              <div id="statUsers" class="stat-value">0</div>
+            </div>
+          </div>
+        </section>
 
-    <!-- === PROFIL ADMIN === -->
-    <section id="profil" class="admin-section hidden">
-      <h2>Pengaturan Profil</h2>
-      <form id="formProfil">
-        <label>Nama Admin</label>
-        <input type="text" id="adminNama" placeholder="Nama Anda">
-        <label>Email</label>
-        <input type="email" id="adminEmail" placeholder="admin@email.com">
-        <label>No Telepon</label>
-        <input type="tel" id="adminTelp" placeholder="08xxxxxxxxx">
-        <label>Nomor Rekening</label>
-        <input type="text" id="adminRekening" placeholder="Contoh: BCA 1234567890">
-        <button type="submit" class="btn">Simpan Perubahan</button>
-      </form>
-    </section>
+        <!-- PRODUCTS -->
+        <section id="products" class="panel hidden">
+          <div class="panel-header">
+            <h2>Manajemen Produk</h2>
+            <div>
+              <button class="btn" id="btnAddProduct">+ Tambah Produk</button>
+              <button class="btn" id="btnReloadProducts">Refresh</button>
+            </div>
+          </div>
+
+          <div class="table-responsive">
+            <table class="admin-table" id="tableProducts">
+              <thead>
+                <tr>
+                  <th>Preview</th>
+                  <th>Nama</th>
+                  <th>Deskripsi</th>
+                  <th>Harga</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- BANNER -->
+        <section id="banner" class="panel hidden">
+          <h2>Banner & Logo</h2>
+          <p>Unggah banner hero dan logo baru. Preview sebentar lalu Simpan.</p>
+
+          <div class="form-grid">
+            <div>
+              <label>Preview Banner Saat Ini</label>
+              <div class="media-preview">
+                <img id="currentBanner" src="assets/img/banner.webp" alt="banner" />
+              </div>
+              <input type="file" id="inputBanner" accept="image/*" />
+            </div>
+            <div>
+              <label>Preview Logo Saat Ini</label>
+              <div class="media-preview">
+                <img id="currentLogo" src="assets/img/logo.webp" alt="logo" />
+              </div>
+              <input type="file" id="inputLogo" accept="image/*" />
+            </div>
+          </div>
+
+          <div style="margin-top:12px;">
+            <button class="btn" id="btnSaveMedia">Simpan Media</button>
+            <span id="mediaStatus" style="margin-left:12px;color:green"></span>
+          </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="panel hidden">
+          <h2>Kontak & Info Toko</h2>
+          <form id="formContact" class="form-stack">
+            <label>WhatsApp (format internasional, contoh: 628123...)</label>
+            <input id="inpWA" type="text" placeholder="628123..." />
+            <label>Email admin</label>
+            <input id="inpEmail" type="email" placeholder="admin@email.com" />
+            <label>Nomor Rekening</label>
+            <input id="inpRek" type="text" placeholder="BCA 12345678 a.n Gallery Mbun" />
+            <label>Deskripsi singkat toko (untuk footer / SEO)</label>
+            <textarea id="inpDesc" rows="4"></textarea>
+            <div style="display:flex;gap:10px">
+              <button class="btn" type="submit">Simpan</button>
+              <button class="btn cancel" id="btnResetContact" type="button">Reset</button>
+            </div>
+            <div id="contactStatus" style="margin-top:8px;color:green"></div>
+          </form>
+        </section>
+
+        <!-- ORDERS -->
+        <section id="orders" class="panel hidden">
+          <h2>Daftar Transaksi</h2>
+          <div class="table-responsive">
+            <table class="admin-table" id="tableOrders">
+              <thead>
+                <tr><th>OrderID</th><th>User</th><th>Produk</th><th>Total</th><th>Status</th><th>Aksi</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- SETTINGS -->
+        <section id="settings" class="panel hidden">
+          <h2>Pengaturan Lainnya</h2>
+          <p>Di sini bisa tambahkan pengaturan themes, maintenance mode, dll. (placeholder untuk pengembangan).</p>
+          <div style="margin-top:12px;">
+            <label><input type="checkbox" id="maintenanceMode" /> Aktifkan Maintenance Mode</label>
+          </div>
+        </section>
+
+      </section>
+    </div>
   </main>
 
-  <!-- Modal Tambah Produk -->
-  <div id="modalProduk" class="modal hidden">
-    <div class="modal-content">
-      <h3>Tambah Produk Baru</h3>
-      <form id="formProduk">
+  <!-- MODAL: tambah/edit produk -->
+  <div id="modalProduct" class="modal hidden" aria-hidden="true">
+    <div class="modal-inner">
+      <h3 id="modalTitle">Tambah Produk</h3>
+      <form id="formProduct" class="form-stack">
+        <input type="hidden" id="prodId" />
         <label>Nama Produk</label>
-        <input type="text" id="namaProduk" required>
-        <label>Harga</label>
-        <input type="number" id="hargaProduk" required>
+        <input id="prodName" required />
         <label>Deskripsi</label>
-        <textarea id="deskripsiProduk" rows="3"></textarea>
-        <label>Gambar Produk</label>
-        <input type="file" id="gambarProduk" accept="image/*">
-        <button type="submit" class="btn">Simpan Produk</button>
-        <button type="button" class="btn cancel" id="closeModal">Batal</button>
+        <textarea id="prodDesc" rows="3"></textarea>
+        <label>Harga (angka)</label>
+        <input id="prodPrice" type="number" required />
+        <label>Status</label>
+        <select id="prodStatus"><option value="active">Active</option><option value="hidden">Hidden</option></select>
+        <label>Gambar (opsional)</label>
+        <input id="prodImage" type="file" accept="image/*" />
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn" type="submit">Simpan</button>
+          <button class="btn cancel" type="button" id="btnCloseModal">Batal</button>
+        </div>
       </form>
     </div>
   </div>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2025 Gallery Mbun | Admin Panel Premium</p>
+  <!-- LOGIN MODAL -->
+  <div id="modalLogin" class="modal hidden" aria-hidden="true">
+    <div class="modal-inner">
+      <h3>Login Admin</h3>
+      <form id="formLogin" class="form-stack">
+        <label>Email</label>
+        <input id="loginEmail" type="email" required />
+        <label>Password</label>
+        <input id="loginPass" type="password" required />
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn" type="submit">Login</button>
+          <button class="btn cancel" type="button" id="btnCloseLogin">Batal</button>
+        </div>
+        <div id="loginStatus" style="margin-top:10px;color:red"></div>
+      </form>
     </div>
+  </div>
+
+  <footer style="padding:24px 4%;text-align:center;color:#666;">
+    © 2025 Gallery Mbun — Admin Panel
   </footer>
 
+  <!-- SCRIPTS -->
+  <script src="config.js"></script> <!-- define API_URL -->
   <script src="admin.js"></script>
 </body>
 </html>
