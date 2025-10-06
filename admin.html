@@ -8,11 +8,12 @@
   <link rel="icon" href="assets/img/logo.webp" />
   <!-- gunakan style utama + admin khusus -->
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="stylesheet" href="assets/css/admin.css" />
 </head>
 <body>
 
   <!-- Top bar -->
-  <header class="navbar" style="position:relative;">
+  <header class="navbar">
     <div class="container" style="display:flex;align-items:center;justify-content:space-between;">
       <div style="display:flex;gap:12px;align-items:center;">
         <img src="assets/img/logo.webp" alt="logo" style="height:36px;border-radius:6px;">
@@ -190,6 +191,7 @@
           <button class="btn" type="submit">Simpan</button>
           <button class="btn cancel" type="button" id="btnCloseModal">Batal</button>
         </div>
+        <div id="productStatus" style="margin-top:8px;color:red"></div>
       </form>
     </div>
   </div>
@@ -217,7 +219,7 @@
   </footer>
 
   <!-- SCRIPTS -->
-  <script src="config.js"></script> <!-- define API_URL -->
+  <script src="config.js"></script>
   <script src="admin.js"></script>
 </body>
 </html>
