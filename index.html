@@ -3,33 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery Mbun | Toko Kreatif & Koleksi Terbaik</title>
-  <meta name="description" content="Gallery Mbun - Toko kreatif yang menyediakan koleksi produk pilihan berkualitas dengan harga terjangkau. Temukan pengalaman belanja yang nyaman dan memuaskan di Mojokerto.">
-  <!-- SEO: Open Graph -->
+  <title>Gallery Mbun | Toko Kreatif & Koleksi Terbaik Mojokerto</title>
+  <meta name="description" content="Gallery Mbun - Toko kreatif Mojokerto dengan koleksi handmade, fashion, dan dekorasi unik. Produk pilihan berkualitas dengan harga terjangkau.">
+  <meta name="keywords" content="Gallery Mbun, toko kreatif Mojokerto, produk handmade, tas rajut, dompet kulit, dekorasi rumah, kerajinan tangan">
+  <meta name="author" content="Gallery Mbun Team">
+
+  <!-- Open Graph SEO -->
   <meta property="og:title" content="Gallery Mbun | Toko Kreatif & Koleksi Terbaik">
-  <meta property="og:description" content="Temukan pengalaman belanja yang nyaman dan koleksi terbaik hanya di Gallery Mbun.">
+  <meta property="og:description" content="Temukan koleksi handmade dan unik di Gallery Mbun Mojokerto.">
   <meta property="og:image" content="assets/img/banner.webp">
-  <meta property="og:type" content="website">
   <meta property="og:url" content="https://gallerymbun.com">
+  <meta property="og:type" content="website">
+
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/favicon.png">
+
   <!-- CSS -->
   <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Font Awesome untuk ikon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
   <!-- === HEADER / NAVBAR === -->
   <header>
     <div class="container nav">
-      <a class="logo" href="#home">
-        <img src="assets/img/logo.webp" alt="Logo Gallery Mbun" height="40">
+      <a href="#home" class="logo">
+        <img src="assets/img/logo.webp" alt="Logo Gallery Mbun" height="38">
         <span>Gallery Mbun</span>
       </a>
+      <button class="nav-toggle" aria-label="Buka navigasi">&#9776;</button>
       <nav>
-        <button class="nav-toggle" aria-label="Buka navigasi">&#9776;</button>
         <ul>
           <li><a href="#home">Beranda</a></li>
           <li><a href="#products">Produk</a></li>
           <li><a href="#about">Tentang</a></li>
+          <li><a href="#testimoni">Testimoni</a></li>
           <li><a href="#contact">Kontak</a></li>
         </ul>
       </nav>
@@ -37,83 +47,106 @@
   </header>
 
   <!-- === BANNER === -->
-  <section id="home" class="banner" aria-label="Banner Utama">
+  <section id="home" class="banner">
     <div class="banner-text">
       <h1>Selamat Datang di <span class="highlight">Gallery Mbun</span></h1>
-      <p>Temukan koleksi terbaik kami dengan harga spesial untuk Anda</p>
-      <a href="#products" class="btn">Lihat Produk</a>
+      <p>Koleksi handmade & kreatif pilihan terbaik dari Mojokerto</p>
+      <a href="#products" class="btn">Lihat Koleksi Kami</a>
     </div>
   </section>
 
   <!-- === PRODUK === -->
-  <section id="products" class="products" aria-label="Produk Unggulan">
+  <section id="products" class="products">
     <div class="container">
-      <h2>Koleksi Produk</h2>
-      <div id="product-gallery" class="product-grid" aria-live="polite" tabindex="0">
-        <!-- Contoh produk statis, produk dinamis bisa dari JS -->
+      <h2>Koleksi Produk Unggulan</h2>
+      <div id="product-gallery" class="product-grid">
+
+        <!-- Produk contoh (bisa diganti dinamis dari JS) -->
         <div class="product-card">
-          <img src="assets/img/produk1.webp" alt="Produk 1 - Dompet Kulit Handmade" loading="lazy">
+          <img src="assets/img/produk1.webp" alt="Dompet Kulit Handmade">
           <h3>Dompet Kulit Handmade</h3>
-          <p>Dompet kulit asli, awet & stylish</p>
+          <p>Terbuat dari kulit asli, elegan dan tahan lama.</p>
           <span class="price">Rp150.000</span>
         </div>
+
         <div class="product-card">
-          <img src="assets/img/produk2.webp" alt="Produk 2 - Tas Rajut Premium" loading="lazy">
+          <img src="assets/img/produk2.webp" alt="Tas Rajut Premium">
           <h3>Tas Rajut Premium</h3>
-          <p>Tas rajut buatan tangan, model kekinian</p>
+          <p>Buatan tangan berkualitas, model kekinian.</p>
           <span class="price">Rp200.000</span>
         </div>
-        <!-- Tambahkan lebih banyak produk sesuai kebutuhan -->
+
+        <div class="product-card">
+          <img src="assets/img/produk3.webp" alt="Dekorasi Anyaman Bambu">
+          <h3>Dekorasi Anyaman Bambu</h3>
+          <p>Sentuhan alami untuk ruang tamu Anda.</p>
+          <span class="price">Rp85.000</span>
+        </div>
+
+        <div class="product-card">
+          <img src="assets/img/produk4.webp" alt="Totebag Eco Handmade">
+          <h3>Totebag Eco Handmade</h3>
+          <p>Ringan, ramah lingkungan, dan stylish.</p>
+          <span class="price">Rp120.000</span>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <!-- === TENTANG === -->
-  <section id="about" class="about" aria-label="Tentang Gallery Mbun">
+  <!-- === TENTANG KAMI === -->
+  <section id="about" class="about">
     <div class="container">
-      <h2>Tentang Kami</h2>
-      <p><strong>Gallery Mbun</strong> adalah toko kreatif yang berkomitmen menyediakan produk berkualitas dan unik dengan harga terjangkau. Kami hadir untuk memberi pengalaman belanja yang nyaman, aman, dan memuaskan.</p>
+      <h2>Tentang Gallery Mbun</h2>
+      <p><strong>Gallery Mbun</strong> adalah toko kreatif di Mojokerto yang menghadirkan produk-produk handmade, fashion, dan dekorasi rumah dengan sentuhan seni lokal. Kami berkomitmen menghadirkan barang berkualitas dengan pelayanan ramah dan profesional.</p>
       <ul>
-        <li>✔️ Produk berkualitas, harga bersaing</li>
-        <li>✔️ Layanan ramah & responsif</li>
-        <li>✔️ Pengiriman cepat & aman</li>
+        <li>✔️ Produk handmade dan unik</li>
+        <li>✔️ Harga bersaing dan transparan</li>
+        <li>✔️ Pengiriman cepat dan aman</li>
       </ul>
     </div>
   </section>
 
-  <!-- === TESTIMONI (opsional) === -->
-  <section id="testimoni" class="testimoni" aria-label="Testimoni Pelanggan">
+  <!-- === TESTIMONI === -->
+  <section id="testimoni" class="testimoni">
     <div class="container">
       <h2>Testimoni Pelanggan</h2>
       <div class="testimoni-list">
         <blockquote>
-          <p>"Pelayanan ramah, barangnya keren banget!"</p>
-          <footer>- Andi, Mojokerto</footer>
+          <p>"Produk berkualitas, pengiriman cepat, pelayanan luar biasa!"</p>
+          <footer>- Andi | Mojokerto</footer>
         </blockquote>
         <blockquote>
-          <p>"Produk sesuai gambar, pengiriman cepat. Recommended!"</p>
-          <footer>- Sinta, Surabaya</footer>
+          <p>"Suka banget sama tas rajutnya! Real pict dan detailnya halus."</p>
+          <footer>- Sinta | Surabaya</footer>
+        </blockquote>
+        <blockquote>
+          <p>"Gallery Mbun jadi favoritku kalau cari hadiah handmade."</p>
+          <footer>- Dewi | Malang</footer>
         </blockquote>
       </div>
     </div>
   </section>
 
   <!-- === KONTAK === -->
-  <section id="contact" class="contact" aria-label="Hubungi Kami">
+  <section id="contact" class="contact">
     <div class="container">
       <h2>Hubungi Kami</h2>
-      <p>Ingin order atau tanya-tanya? Silakan hubungi kami melalui:</p>
+      <p>Pesan produk atau konsultasi langsung dengan kami:</p>
       <ul>
-        <li>📞 <a href="https://wa.me/628xxxxxxxxxx" target="_blank" rel="noopener">WhatsApp: 08xx-xxxx-xxxx</a></li>
+        <li>📞 <a href="https://wa.me/6281234567890" target="_blank">WhatsApp: 0812-3456-7890</a></li>
         <li>📧 <a href="mailto:gallerymbun@gmail.com">gallerymbun@gmail.com</a></li>
-        <li>📍 <a href="https://goo.gl/maps/6vXXXXXXXXX" target="_blank" rel="noopener">Jl. Pekayon No.39, Kota Mojokerto</a></li>
+        <li>📍 <a href="https://goo.gl/maps/xxxxxxxxx" target="_blank">Jl. Pekayon No.39, Kota Mojokerto</a></li>
       </ul>
       <div class="social-media">
-        <a href="https://instagram.com/gallerymbun" target="_blank" rel="noopener" aria-label="Instagram Gallery Mbun">
-          <img src="assets/img/ig-icon.svg" alt="Instagram" height="24">
+        <a href="https://instagram.com/gallerymbun" target="_blank" aria-label="Instagram">
+          <i class="fab fa-instagram fa-lg"></i>
         </a>
-        <a href="https://facebook.com/gallerymbun" target="_blank" rel="noopener" aria-label="Facebook Gallery Mbun">
-          <img src="assets/img/fb-icon.svg" alt="Facebook" height="24">
+        <a href="https://facebook.com/gallerymbun" target="_blank" aria-label="Facebook">
+          <i class="fab fa-facebook fa-lg"></i>
+        </a>
+        <a href="https://tiktok.com/@gallerymbun" target="_blank" aria-label="TikTok">
+          <i class="fab fa-tiktok fa-lg"></i>
         </a>
       </div>
     </div>
@@ -122,18 +155,18 @@
   <!-- === FOOTER === -->
   <footer>
     <div class="container">
-      <p>&copy; 2025 <strong>Gallery Mbun</strong>. All rights reserved.<br>
-        Dibuat dengan <span style="color:#e25555;">&#10084;</span> di Mojokerto.</p>
+      <p>&copy; 2025 <strong>Gallery Mbun</strong> — Semua hak cipta dilindungi.<br>Dibuat dengan <span style="color:#fb8500;">❤</span> di Mojokerto.</p>
     </div>
   </footer>
-  <!-- JS -->
-  <script src="js/config.js"></script>
-  <script src="js/app.js"></script>
+
+  <!-- === JS === -->
   <script>
-    // Hamburger menu JS
-    document.querySelector('.nav-toggle').onclick = function() {
-      document.querySelector('nav ul').classList.toggle('show');
-    };
+    // Toggle menu mobile
+    const navToggle = document.querySelector('.nav-toggle');
+    const navList = document.querySelector('header nav ul');
+    navToggle.addEventListener('click', () => {
+      navList.classList.toggle('show');
+    });
   </script>
 </body>
 </html>
