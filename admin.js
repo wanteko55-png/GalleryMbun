@@ -1,14 +1,10 @@
-/* admin.js
-   Penyempurnaan khusus admin: validasi, feedback, dan integrasi dengan admin.css
-*/
+// admin.js -- CRUD Produk Google Sheet, validasi field wajib, feedback koneksi
 
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
 const ADMIN_KEY = 'gm_admin_auth';
 const ADMIN_DATA_KEY = 'gm_products_local';
-const CONTACT_KEY = 'gm_contact_local';
-const MEDIA_KEY = 'gm_media_local';
 
 /* ---------- AUTH ---------- */
 function isLoggedIn() {
@@ -29,45 +25,23 @@ const adminEmailLabel = $('#adminEmailLabel');
 
 /* ---------- INIT ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  // auth UI
   setupAuthUI();
-
-  // navigation
   $$('.admin-link').forEach(a => a.addEventListener('click', onNavClick));
-
-  // product buttons
   $('#btnAddProduct').addEventListener('click', openAddProduct);
   $('#btnReloadProducts').addEventListener('click', loadProducts);
-
-  // modal login
   btnOpenLogin.addEventListener('click', () => showModal(modalLogin));
   btnCloseLogin.addEventListener('click', () => closeModal(modalLogin));
   $('#formLogin').addEventListener('submit', handleLogin);
-
-  // product modal handlers
   $('#btnCloseModal').addEventListener('click', () => closeModal(modalProduct));
   $('#formProduct').addEventListener('submit', handleSaveProduct);
 
-  // media handlers
-  $('#inputBanner').addEventListener('change', previewBanner);
-  $('#inputLogo').addEventListener('change', previewLogo);
-  $('#btnSaveMedia').addEventListener('click', saveMedia);
+  // Sederhanakan: loadProducts saat awal, cek koneksi
+  loadProducts();
 
-  // contact form
-  $('#formContact').addEventListener('submit', saveContact);
-  $('#btnResetContact').addEventListener('click', resetContactForm);
-
-  // logout
   btnLogout.addEventListener('click', () => {
     localStorage.removeItem(ADMIN_KEY);
     setupAuthUI();
   });
-
-  // initial loads
-  loadProducts();
-  loadOrders();
-  loadContact();
-  loadMediaPreview();
 });
 
 /* ---------- AUTH UI ---------- */
@@ -116,7 +90,6 @@ function onNavClick(e){
   e.preventDefault();
   const t = e.currentTarget;
   const target = t.dataset.target;
-  // hide all panels
   $$('.panel').forEach(p => p.classList.add('hidden'));
   $(`#${target}`).classList.remove('hidden');
   $$('.admin-link').forEach(a=>a.classList.remove('active'));
@@ -125,53 +98,22 @@ function onNavClick(e){
 
 /* ---------- PRODUCTS CRUD ---------- */
 async function loadProducts(){
+  setDashboardStatus('');
   try {
     if (typeof API_URL !== 'undefined' && API_URL){
       const res = await fetch(`${API_URL}?action=getProducts`);
       if(res.ok){
         const json = await res.json();
-        const items = json.data || json;
-        if(Array.isArray(items)) {
-          renderProducts(items);
-          localStorage.setItem(ADMIN_DATA_KEY, JSON.stringify(items));
-          updateStats(items.length);
-          return;
-        }
+        const items = Array.isArray(json.data) ? json.data : (Array.isArray(json) ? json : []);
+        renderProducts(items);
+        updateStats(items.length);
+        return;
       }
     }
+    setDashboardStatus('Tidak bisa terhubung dengan Google Sheets.');
   } catch(err){
-    console.warn('API loadProducts error (fallback to local):', err);
+    setDashboardStatus('Koneksi ke Google Sheet gagal!');
   }
-
-  // fallback: try local products file or localStorage
-  try {
-    const cached = localStorage.getItem(ADMIN_DATA_KEY);
-    if(cached){
-      const parsed = JSON.parse(cached);
-      renderProducts(parsed);
-      updateStats(parsed.length);
-      return;
-    }
-
-    const fallbackPaths = ['assets/products.json','assets/img/products.json','assets/products/products.json'];
-    for(const p of fallbackPaths){
-      try{
-        const r = await fetch(p);
-        if(r.ok){
-          const j = await r.json();
-          const items = j.products || j;
-          renderProducts(items);
-          localStorage.setItem(ADMIN_DATA_KEY, JSON.stringify(items));
-          updateStats(items.length);
-          return;
-        }
-      } catch(e){}
-    }
-  } catch(e){
-    console.error('Fallback loadProducts error', e);
-  }
-
-  // if still nothing
   renderProducts([]);
   updateStats(0);
 }
@@ -182,11 +124,12 @@ function renderProducts(items){
   items.forEach((it, idx) => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="width:140px"><img src="${it.image||'assets/img/placeholder.png'}" style="width:120px;height:80px;object-fit:cover;border-radius:6px" /></td>
-      <td>${escapeHtml(it.name||'—')}</td>
-      <td>${escapeHtml(it.description||'—')}</td>
-      <td>${escapeHtml(it.price||'—')}</td>
-      <td>${escapeHtml(it.status||'active')}</td>
+      <td>${escapeHtml(it.ProductName||'')}</td>
+      <td>${escapeHtml(it.Description||'')}</td>
+      <td>${escapeHtml(it.Price||'')}</td>
+      <td>${escapeHtml(it.Category||'')}</td>
+      <td>${escapeHtml(it.Type||'')}</td>
+      <td>${escapeHtml(it.Status||'')}</td>
       <td>
         <button class="btn small" data-idx="${idx}" data-action="edit">Edit</button>
         <button class="btn small cancel" data-idx="${idx}" data-action="delete">Hapus</button>
@@ -194,15 +137,12 @@ function renderProducts(items){
     `;
     tbody.appendChild(tr);
   });
-
-  // attach event handlers
   $$('#tableProducts button').forEach(b => {
     b.addEventListener('click', (ev) => {
       const a = ev.currentTarget.dataset.action;
       const idx = Number(ev.currentTarget.dataset.idx);
-      const productList = JSON.parse(localStorage.getItem(ADMIN_DATA_KEY) || '[]');
-      if(a==='edit') openEditProduct(productList[idx], idx);
-      if(a==='delete') deleteProduct(idx);
+      if(a==='edit') openEditProduct(items[idx], idx);
+      if(a==='delete') deleteProduct(items[idx]);
     });
   });
 }
@@ -217,204 +157,98 @@ function openAddProduct(){
   $('#prodName').value = '';
   $('#prodDesc').value = '';
   $('#prodPrice').value = '';
-  $('#prodStatus').value = 'active';
-  $('#prodImage').value = '';
+  $('#prodCategory').value = '';
+  $('#prodType').value = 'Digital';
+  $('#prodStatus').value = 'Active';
   $('#productStatus').textContent = '';
   showModal(modalProduct);
 }
 
 function openEditProduct(product, idx){
   $('#modalTitle').textContent = 'Edit Produk';
-  $('#prodId').value = idx;
-  $('#prodName').value = product.name || '';
-  $('#prodDesc').value = product.description || '';
-  $('#prodPrice').value = product.price || '';
-  $('#prodStatus').value = product.status || 'active';
-  $('#prodImage').value = '';
+  $('#prodId').value = product.ID || '';
+  $('#prodName').value = product.ProductName || '';
+  $('#prodDesc').value = product.Description || '';
+  $('#prodPrice').value = product.Price || '';
+  $('#prodCategory').value = product.Category || '';
+  $('#prodType').value = product.Type || 'Digital';
+  $('#prodStatus').value = product.Status || 'Active';
   $('#productStatus').textContent = '';
   showModal(modalProduct);
 }
 
-function deleteProduct(idx){
-  if(!confirm('Hapus produk ini?')) return;
-  const arr = JSON.parse(localStorage.getItem(ADMIN_DATA_KEY) || '[]');
-  if(idx>=0 && idx < arr.length){
-    arr.splice(idx,1);
-    localStorage.setItem(ADMIN_DATA_KEY, JSON.stringify(arr));
-    trySyncProducts(arr);
-    renderProducts(arr);
-    updateStats(arr.length);
-  }
-}
-
 async function handleSaveProduct(e){
   e.preventDefault();
-  const idx = $('#prodId').value;
+  // Validasi wajib
+  const id = $('#prodId').value;
   const name = $('#prodName').value.trim();
   const desc = $('#prodDesc').value.trim();
   const price = $('#prodPrice').value.trim();
+  const category = $('#prodCategory').value.trim();
+  const type = $('#prodType').value;
   const status = $('#prodStatus').value;
-  const file = $('#prodImage').files[0];
-
-  // Validasi
-  if (!name || !price) {
-    $('#productStatus').textContent = 'Nama dan harga produk wajib diisi!';
+  if (!name || !desc || !price || !category || !type || !status) {
+    $('#productStatus').textContent = 'Semua field wajib diisi!';
     setTimeout(()=>{$('#productStatus').textContent=''}, 2000);
     return;
   }
-
-  let arr = JSON.parse(localStorage.getItem(ADMIN_DATA_KEY) || '[]');
-
-  // handle image file -> base64
-  let imageUrl = '';
-  if(file){
-    imageUrl = await toBase64(file);
-  }
-
-  if(idx===''){ // add
-    const obj = { name, description: desc, price, status, image: imageUrl || 'assets/img/placeholder.png' };
-    arr.push(obj);
-  } else { // edit
-    const i = Number(idx);
-    arr[i] = { ...(arr[i] || {}), name, description: desc, price, status, image: imageUrl || arr[i].image || 'assets/img/placeholder.png' };
-  }
-
-  localStorage.setItem(ADMIN_DATA_KEY, JSON.stringify(arr));
-  trySyncProducts(arr);
-  renderProducts(arr);
-  updateStats(arr.length);
-  closeModal(modalProduct);
   $('#productStatus').textContent = '';
-}
 
-function toBase64(file){
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result);
-    r.onerror = () => rej('fail convert');
-    r.readAsDataURL(file);
-  });
-}
+  // Data produk sesuai Sheet
+  const data = {
+    ID: id,
+    ProductName: name,
+    Description: desc,
+    Price: price,
+    Category: category,
+    Type: type,
+    Status: status
+  };
 
-async function trySyncProducts(arr){
-  if(typeof API_URL === 'undefined' || !API_URL) return;
-  try{
-    await fetch(API_URL, {
+  // Simpan ke Google Sheet
+  try {
+    let action = id ? 'updateProduct' : 'addProduct';
+    const res = await fetch(API_URL, {
       method: 'POST',
       headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'syncProducts', products: arr })
+      body: JSON.stringify({ action, product: data })
     });
-    // Feedback sinkronisasi, optional
+    if (res.ok) {
+      closeModal(modalProduct);
+      loadProducts();
+    } else {
+      $('#productStatus').textContent = 'Gagal menyimpan ke Google Sheets!';
+    }
+  } catch (e) {
+    $('#productStatus').textContent = 'Koneksi gagal!';
+  }
+}
+
+async function deleteProduct(product){
+  if(!confirm('Hapus produk ini?')) return;
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ action: 'deleteProduct', id: product.ID })
+    });
+    if (res.ok) {
+      loadProducts();
+    } else {
+      alert('Gagal hapus dari Google Sheets!');
+    }
   } catch(e){
-    console.warn('Sync to API failed', e);
+    alert('Koneksi gagal!');
   }
 }
 
-/* ---------- MEDIA (banner/logo) ---------- */
-function previewBanner(e){
-  const f = e.target.files[0];
-  if(!f) return;
-  toBase64(f).then(b64 => { $('#currentBanner').src = b64; localStorage.setItem(MEDIA_KEY, JSON.stringify({ ...(JSON.parse(localStorage.getItem(MEDIA_KEY)||'{}')), banner:b64 })); });
-}
-function previewLogo(e){
-  const f = e.target.files[0];
-  if(!f) return;
-  toBase64(f).then(b64 => { $('#currentLogo').src = b64; localStorage.setItem(MEDIA_KEY, JSON.stringify({ ...(JSON.parse(localStorage.getItem(MEDIA_KEY)||'{}')), logo:b64 })); });
-}
-function loadMediaPreview(){
-  const m = JSON.parse(localStorage.getItem(MEDIA_KEY) || '{}');
-  if(m.banner) $('#currentBanner').src = m.banner;
-  if(m.logo) $('#currentLogo').src = m.logo;
-}
-async function saveMedia(){
-  const m = JSON.parse(localStorage.getItem(MEDIA_KEY) || '{}');
-  if(!m.banner && !m.logo){
-    $('#mediaStatus').textContent = 'Tidak ada perubahan.';
-    setTimeout(()=>$('#mediaStatus').textContent='',2000);
-    return;
-  }
-  if(typeof API_URL !== 'undefined' && API_URL){
-    try{
-      const res = await fetch(API_URL, {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ action:'updateMedia', media: m })
-      });
-      if(res.ok){ $('#mediaStatus').textContent = 'Media tersimpan di server.'; setTimeout(()=>$('#mediaStatus').textContent='',2500); return; }
-    } catch(e){ console.warn('saveMedia -> API fail', e); }
-  }
-  $('#mediaStatus').textContent = 'Perubahan tersimpan lokal (belum diupload ke server).';
-  setTimeout(()=>$('#mediaStatus').textContent='',3000);
+/* ---------- DASHBOARD STATUS ---------- */
+function setDashboardStatus(msg) {
+  const el = document.getElementById('dashboardStatus');
+  if (el) el.textContent = msg || '';
 }
 
-/* ---------- CONTACT ---------- */
-function loadContact(){
-  const c = JSON.parse(localStorage.getItem(CONTACT_KEY) || '{}');
-  $('#inpWA').value = c.wa || '';
-  $('#inpEmail').value = c.email || '';
-  $('#inpRek').value = c.rek || '';
-  $('#inpDesc').value = c.desc || '';
-}
-async function saveContact(e){
-  e.preventDefault();
-  const data = { wa:$('#inpWA').value.trim(), email:$('#inpEmail').value.trim(), rek:$('#inpRek').value.trim(), desc:$('#inpDesc').value.trim() };
-  // validasi
-  if(!data.wa || !data.email){
-    $('#contactStatus').textContent = 'WhatsApp & Email wajib diisi!';
-    setTimeout(()=>{$('#contactStatus').textContent=''},2000);
-    return;
-  }
-  if(typeof API_URL !== 'undefined' && API_URL){
-    try{
-      const r = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'saveContact', contact: data }) });
-      if(r.ok){ $('#contactStatus').textContent = 'Kontak tersimpan di server.'; setTimeout(()=>$('#contactStatus').textContent='',2500); localStorage.setItem(CONTACT_KEY, JSON.stringify(data)); return; }
-    } catch(e){ console.warn('saveContact API fail', e); }
-  }
-  localStorage.setItem(CONTACT_KEY, JSON.stringify(data));
-  $('#contactStatus').textContent = 'Kontak tersimpan lokal (belum diupload).';
-  setTimeout(()=>{$('#contactStatus').textContent=''},2500);
-}
-function resetContactForm(){
-  localStorage.removeItem(CONTACT_KEY);
-  loadContact();
-}
-
-/* ---------- ORDERS (demo) ---------- */
-function loadOrders(){
-  (async () => {
-    try {
-      if(typeof API_URL !== 'undefined' && API_URL){
-        const r = await fetch(`${API_URL}?action=getOrders`);
-        if(r.ok){
-          const j = await r.json();
-          const orders = j.data || j;
-          renderOrders(orders);
-          return;
-        }
-      }
-    } catch(e){ console.warn('loadOrders API fail', e); }
-    // fallback: demo data
-    const demo = [
-      { id:'ORD_001', user:'Siti', items:'Vas Keramik', total:'Rp185.000', status:'Pending' },
-      { id:'ORD_002', user:'Asep', items:'Totebag', total:'Rp120.000', status:'Shipped' }
-    ];
-    renderOrders(demo);
-  })();
-}
-function renderOrders(list){
-  const tbody = $('#tableOrders tbody');
-  tbody.innerHTML = '';
-  list.forEach(o=>{
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${o.id||o.OrderID||''}</td><td>${o.user||o.UserID||''}</td><td>${o.items||o.ProductID||''}</td><td>${o.total||o.TotalPrice||''}</td><td>${o.status||o.Status||''}</td>
-      <td><button class="btn small" onclick="alert('Detail order: ${o.id||o.OrderID||''}')">Detail</button></td>`;
-    tbody.appendChild(tr);
-  });
-}
-
-/* ---------- STATS ---------- */
-function updateStats(totalProducts=0){
-  $('#statTotalProduk').textContent = totalProducts;
-  // demo values
-  $('#statOrders').textContent = 5;
-  $('#statUsers').textContent = 42;
-}
+/* ---------- (BANNER, CONTACT, ORDERS, SETTINGS: opsional, lanjutkan sesuai kebutuhan) ---------- */
+/* Kamu dapat menambah fungsi loadOrders, loadContact, dsb sesuai script.js sebelumnya, tinggal digabungkan.
+   Jika ingin CRUD full, pastikan endpoint API_URL mendukungnya.
+*/
