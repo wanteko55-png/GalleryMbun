@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Admin | Gallery Mbun</title>
+  <meta name="description" content="Panel Admin Gallery Mbun - Kelola produk, pesanan, dan profil dengan mudah.">
+  <link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+  <header class="admin-header">
+    <div class="container admin-nav">
+      <a class="logo" href="../index.html">
+        <img src="../assets/img/logo.webp" alt="Gallery Mbun" height="38">
+        <span>Dashboard Admin</span>
+      </a>
+      <nav>
+        <button class="nav-toggle">&#9776;</button>
+        <ul>
+          <li><a href="#dashboard" class="active">Dashboard</a></li>
+          <li><a href="#produk">Produk</a></li>
+          <li><a href="#transaksi">Transaksi</a></li>
+          <li><a href="#profil">Profil</a></li>
+          <li><a href="#logout" class="logout">Logout</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="admin-content" class="container">
+    <!-- === DASHBOARD === -->
+    <section id="dashboard" class="admin-section">
+      <h2>Selamat Datang, <span id="admin-name">Admin Gallery Mbun</span></h2>
+      <p>Kelola semua aktivitas toko Anda dengan mudah.</p>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <h3>Total Produk</h3>
+          <p id="stat-produk">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Pesanan Baru</h3>
+          <p id="stat-order">0</p>
+        </div>
+        <div class="stat-card">
+          <h3>Pelanggan</h3>
+          <p id="stat-user">0</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- === PRODUK === -->
+    <section id="produk" class="admin-section hidden">
+      <h2>Manajemen Produk</h2>
+      <button class="btn" id="btnTambahProduk">+ Tambah Produk</button>
+      <table class="admin-table" id="produkTable">
+        <thead>
+          <tr>
+            <th>Gambar</th>
+            <th>Nama Produk</th>
+            <th>Harga</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data produk dinamis -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- === TRANSAKSI === -->
+    <section id="transaksi" class="admin-section hidden">
+      <h2>Daftar Transaksi</h2>
+      <table class="admin-table" id="transaksiTable">
+        <thead>
+          <tr>
+            <th>ID Pesanan</th>
+            <th>Nama Pembeli</th>
+            <th>Produk</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data transaksi dinamis -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- === PROFIL ADMIN === -->
+    <section id="profil" class="admin-section hidden">
+      <h2>Pengaturan Profil</h2>
+      <form id="formProfil">
+        <label>Nama Admin</label>
+        <input type="text" id="adminNama" placeholder="Nama Anda">
+        <label>Email</label>
+        <input type="email" id="adminEmail" placeholder="admin@email.com">
+        <label>No Telepon</label>
+        <input type="tel" id="adminTelp" placeholder="08xxxxxxxxx">
+        <label>Nomor Rekening</label>
+        <input type="text" id="adminRekening" placeholder="Contoh: BCA 1234567890">
+        <button type="submit" class="btn">Simpan Perubahan</button>
+      </form>
+    </section>
+  </main>
+
+  <!-- Modal Tambah Produk -->
+  <div id="modalProduk" class="modal hidden">
+    <div class="modal-content">
+      <h3>Tambah Produk Baru</h3>
+      <form id="formProduk">
+        <label>Nama Produk</label>
+        <input type="text" id="namaProduk" required>
+        <label>Harga</label>
+        <input type="number" id="hargaProduk" required>
+        <label>Deskripsi</label>
+        <textarea id="deskripsiProduk" rows="3"></textarea>
+        <label>Gambar Produk</label>
+        <input type="file" id="gambarProduk" accept="image/*">
+        <button type="submit" class="btn">Simpan Produk</button>
+        <button type="button" class="btn cancel" id="closeModal">Batal</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Gallery Mbun | Admin Panel Premium</p>
+    </div>
+  </footer>
+
+  <script src="admin.js"></script>
+</body>
+</html>
