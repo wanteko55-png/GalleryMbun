@@ -1,160 +1,75 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Gallery Mbun</title>
-  <link rel="stylesheet" href="assets/css/style.css" />
-  <script src="config.js" defer></script>
-  <script src="admin.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - SDN Miji 1</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="assets/img/logo.png" type="image/png">
 </head>
-
 <body>
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <img src="assets/img/logo.webp" alt="Gallery Mbun Logo" class="logo" />
-      <h2>Admin Panel</h2>
+
+  <!-- ======== NAVBAR ======== -->
+  <header class="navbar">
+    <div class="navbar-left">
+      <img src="assets/img/logo.png" alt="Logo Sekolah" class="logo">
+      <h1 class="navbar-title">Admin Panel SDN Miji 1</h1>
     </div>
-    <nav class="sidebar-nav">
-      <ul>
-        <li class="active" data-section="dashboard">📊 Dashboard</li>
-        <li data-section="produk">🛍️ Produk</li>
-        <li data-section="pesanan">🧾 Pesanan</li>
-        <li data-section="pengguna">👥 Pengguna</li>
-        <li data-section="pengaturan">⚙️ Pengaturan</li>
-      </ul>
-    </nav>
-    <button id="logoutBtn" class="btn-logout">🚪 Logout</button>
-  </aside>
+    <div class="navbar-right">
+      <button id="logoutBtn" class="btn btn-danger">Logout</button>
+    </div>
+  </header>
 
-  <!-- ===== MAIN CONTENT ===== -->
-  <main class="main-content">
-    <header class="admin-header">
-      <h1 id="sectionTitle">Dashboard Admin</h1>
-      <div class="admin-actions">
-        <button class="btn-primary" id="refreshBtn">🔄 Refresh</button>
-        <button class="btn-secondary" id="addNewBtn">➕ Tambah Baru</button>
-      </div>
-    </header>
+  <!-- ======== MAIN CONTENT ======== -->
+  <main class="admin-container">
+    <section class="admin-card">
+      <h2>Kelola Data</h2>
+      <p>Silakan pilih menu di bawah ini untuk mengelola sistem keuangan sekolah.</p>
 
-    <section id="dashboard" class="admin-section active">
-      <div class="card-grid">
-        <div class="card">
-          <h3>Total Produk</h3>
-          <p id="totalProduk">0</p>
-        </div>
-        <div class="card">
-          <h3>Total Pesanan</h3>
-          <p id="totalPesanan">0</p>
-        </div>
-        <div class="card">
-          <h3>Total Pengguna</h3>
-          <p id="totalPengguna">0</p>
-        </div>
+      <div class="admin-buttons">
+        <button class="btn btn-primary" onclick="bukaHalaman('dataSiswa')">📋 Data Siswa</button>
+        <button class="btn btn-secondary" onclick="bukaHalaman('transaksi')">💰 Transaksi</button>
+        <button class="btn btn-success" onclick="bukaHalaman('rekap')">📑 Rekap Iuran</button>
+        <button class="btn btn-warning" onclick="bukaHalaman('tabungan')">💸 Tabungan</button>
       </div>
     </section>
 
-    <section id="produk" class="admin-section">
-      <h2>Manajemen Produk</h2>
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama Produk</th>
-              <th>Kategori</th>
-              <th>Harga</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody id="produkList">
-            <tr><td colspan="5" class="text-center">Belum ada data</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="pesanan" class="admin-section">
-      <h2>Daftar Pesanan</h2>
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Tanggal</th>
-              <th>Total</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="pesananList">
-            <tr><td colspan="5" class="text-center">Belum ada pesanan</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="pengguna" class="admin-section">
-      <h2>Daftar Pengguna</h2>
-      <div class="table-wrapper">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nama</th>
-              <th>Email</th>
-              <th>Peran</th>
-            </tr>
-          </thead>
-          <tbody id="penggunaList">
-            <tr><td colspan="4" class="text-center">Belum ada data pengguna</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section id="pengaturan" class="admin-section">
-      <h2>Pengaturan Website</h2>
-      <form id="pengaturanForm" class="form-settings">
-        <label>Nama Toko:</label>
-        <input type="text" id="namaToko" placeholder="Gallery Mbun" />
-
-        <label>Alamat Email:</label>
-        <input type="email" id="emailToko" placeholder="admin@gallerymbun.com" />
-
-        <label>Warna Tema:</label>
-        <input type="color" id="warnaTema" value="#007BFF" />
-
-        <button type="submit" class="btn-primary">💾 Simpan Perubahan</button>
-      </form>
+    <!-- ======== PLACEHOLDER KONTEN ======== -->
+    <section id="halamanContent" class="admin-content">
+      <p class="placeholder">Pilih salah satu menu di atas untuk memulai.</p>
     </section>
   </main>
 
-  <!-- ===== MODAL TAMBAH PRODUK ===== -->
-  <div class="modal" id="modalTambah">
-    <div class="modal-content">
-      <h2>Tambah Produk Baru</h2>
-      <form id="formTambahProduk">
-        <label>Nama Produk:</label>
-        <input type="text" id="namaProduk" required />
-
-        <label>Kategori:</label>
-        <input type="text" id="kategoriProduk" required />
-
-        <label>Harga:</label>
-        <input type="number" id="hargaProduk" required />
-
-        <div class="modal-actions">
-          <button type="submit" class="btn-primary">Simpan</button>
-          <button type="button" class="btn-secondary" id="closeModal">Batal</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <footer class="admin-footer">
-    <p>© 2025 Gallery Mbun. All rights reserved.</p>
+  <!-- ======== FOOTER ======== -->
+  <footer class="footer">
+    <p>© 2025 SDN Miji 1 Kota Mojokerto | Bendahara: <b>Milenial Project</b></p>
   </footer>
+
+  <!-- ======== SCRIPT ======== -->
+  <script>
+    // Navigasi antar halaman admin
+    function bukaHalaman(halaman) {
+      const content = document.getElementById('halamanContent');
+      content.innerHTML = `<p class="loading">Memuat ${halaman}...</p>`;
+
+      // simulasi loading konten (nanti bisa diganti fetch HTML partial)
+      setTimeout(() => {
+        content.innerHTML = `
+          <div class="card">
+            <h3>Halaman ${halaman.charAt(0).toUpperCase() + halaman.slice(1)}</h3>
+            <p>Konten ${halaman} akan tampil di sini.</p>
+          </div>
+        `;
+      }, 500);
+    }
+
+    // Tombol logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      if (confirm('Yakin ingin logout?')) {
+        window.location.href = 'index.html';
+      }
+    });
+  </script>
+
 </body>
 </html>
