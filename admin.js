@@ -1,23 +1,16 @@
 /* admin.js
-   Full admin interactions:
-   - simple login (localStorage)
-   - load products (API_URL -> GET ?action=getProducts) or fallback to assets/img/products.json
-   - create/edit/delete product (POST to API_URL?action=... OR localStorage fallback)
-   - update banner/logo (preview + store to localStorage or send to API)
-   - update contact info (save to localStorage or API)
-   - manage simple orders (demo)
+   Penyempurnaan khusus admin: validasi, feedback, dan integrasi dengan admin.css
 */
 
-/* ---------- HELPERS ---------- */
 const $ = sel => document.querySelector(sel);
 const $$ = sel => Array.from(document.querySelectorAll(sel));
 
-/* ---------- AUTH ---------- */
 const ADMIN_KEY = 'gm_admin_auth';
 const ADMIN_DATA_KEY = 'gm_products_local';
 const CONTACT_KEY = 'gm_contact_local';
 const MEDIA_KEY = 'gm_media_local';
 
+/* ---------- AUTH ---------- */
 function isLoggedIn() {
   return !!localStorage.getItem(ADMIN_KEY);
 }
@@ -48,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // modal login
   btnOpenLogin.addEventListener('click', () => showModal(modalLogin));
-  $('#btnCloseLogin').addEventListener('click', () => closeModal(modalLogin));
+  btnCloseLogin.addEventListener('click', () => closeModal(modalLogin));
   $('#formLogin').addEventListener('submit', handleLogin);
 
   // product modal handlers
@@ -83,8 +76,6 @@ function setupAuthUI(){
     adminLogged.style.display = 'flex';
     $('#admin-login-area').style.display = 'none';
     adminEmailLabel.textContent = getAdminEmail();
-    $('#admin-logged').style.display = 'flex';
-    $('#admin-login-area').style.display = 'none';
   } else {
     $('#admin-login-area').style.display = 'flex';
     $('#admin-logged').style.display = 'none';
@@ -94,6 +85,8 @@ function setupAuthUI(){
 function showModal(modal){
   modal.classList.remove('hidden');
   modal.setAttribute('aria-hidden','false');
+  const firstInput = modal.querySelector('input,textarea,select,button');
+  if(firstInput) firstInput.focus();
 }
 function closeModal(modal){
   modal.classList.add('hidden');
@@ -101,7 +94,6 @@ function closeModal(modal){
 }
 
 /* ---------- LOGIN (dummy) ---------- */
-// default admin creds (only for local demo). For production, integrate OAuth or Apps Script-backed auth.
 const DEFAULT_ADMIN = { email: 'admin@gallerymbun.com', password: 'gallery123' };
 
 function handleLogin(e){
@@ -115,6 +107,7 @@ function handleLogin(e){
     setupAuthUI();
   } else {
     $('#loginStatus').textContent = 'Email atau password salah.';
+    setTimeout(() => { $('#loginStatus').textContent = ''; }, 2500);
   }
 }
 
@@ -132,13 +125,11 @@ function onNavClick(e){
 
 /* ---------- PRODUCTS CRUD ---------- */
 async function loadProducts(){
-  // try API first
   try {
     if (typeof API_URL !== 'undefined' && API_URL){
       const res = await fetch(`${API_URL}?action=getProducts`);
       if(res.ok){
         const json = await res.json();
-        // API expected to return array in json.data or json
         const items = json.data || json;
         if(Array.isArray(items)) {
           renderProducts(items);
@@ -154,7 +145,6 @@ async function loadProducts(){
 
   // fallback: try local products file or localStorage
   try {
-    // try localStorage
     const cached = localStorage.getItem(ADMIN_DATA_KEY);
     if(cached){
       const parsed = JSON.parse(cached);
@@ -163,7 +153,6 @@ async function loadProducts(){
       return;
     }
 
-    // try static JSON (assets/img/products.json or assets/products.json)
     const fallbackPaths = ['assets/products.json','assets/img/products.json','assets/products/products.json'];
     for(const p of fallbackPaths){
       try{
@@ -218,12 +207,10 @@ function renderProducts(items){
   });
 }
 
-/* helper escape */
 function escapeHtml(s){
   return (s+'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#039;"}[c]));
 }
 
-/* open add */
 function openAddProduct(){
   $('#modalTitle').textContent = 'Tambah Produk';
   $('#prodId').value = '';
@@ -232,36 +219,34 @@ function openAddProduct(){
   $('#prodPrice').value = '';
   $('#prodStatus').value = 'active';
   $('#prodImage').value = '';
+  $('#productStatus').textContent = '';
   showModal(modalProduct);
 }
 
-/* open edit */
 function openEditProduct(product, idx){
   $('#modalTitle').textContent = 'Edit Produk';
-  $('#prodId').value = idx; // index in local array
+  $('#prodId').value = idx;
   $('#prodName').value = product.name || '';
   $('#prodDesc').value = product.description || '';
   $('#prodPrice').value = product.price || '';
   $('#prodStatus').value = product.status || 'active';
   $('#prodImage').value = '';
+  $('#productStatus').textContent = '';
   showModal(modalProduct);
 }
 
-/* delete product */
 function deleteProduct(idx){
   if(!confirm('Hapus produk ini?')) return;
   const arr = JSON.parse(localStorage.getItem(ADMIN_DATA_KEY) || '[]');
   if(idx>=0 && idx < arr.length){
     arr.splice(idx,1);
     localStorage.setItem(ADMIN_DATA_KEY, JSON.stringify(arr));
-    // try sync to API
     trySyncProducts(arr);
     renderProducts(arr);
     updateStats(arr.length);
   }
 }
 
-/* save product (add/edit) */
 async function handleSaveProduct(e){
   e.preventDefault();
   const idx = $('#prodId').value;
@@ -270,6 +255,13 @@ async function handleSaveProduct(e){
   const price = $('#prodPrice').value.trim();
   const status = $('#prodStatus').value;
   const file = $('#prodImage').files[0];
+
+  // Validasi
+  if (!name || !price) {
+    $('#productStatus').textContent = 'Nama dan harga produk wajib diisi!';
+    setTimeout(()=>{$('#productStatus').textContent=''}, 2000);
+    return;
+  }
 
   let arr = JSON.parse(localStorage.getItem(ADMIN_DATA_KEY) || '[]');
 
@@ -292,9 +284,9 @@ async function handleSaveProduct(e){
   renderProducts(arr);
   updateStats(arr.length);
   closeModal(modalProduct);
+  $('#productStatus').textContent = '';
 }
 
-/* convert file to base64 */
 function toBase64(file){
   return new Promise((res, rej) => {
     const r = new FileReader();
@@ -304,7 +296,6 @@ function toBase64(file){
   });
 }
 
-/* try sync products to API if available */
 async function trySyncProducts(arr){
   if(typeof API_URL === 'undefined' || !API_URL) return;
   try{
@@ -313,7 +304,7 @@ async function trySyncProducts(arr){
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify({ action:'syncProducts', products: arr })
     });
-    console.log('Synced to API');
+    // Feedback sinkronisasi, optional
   } catch(e){
     console.warn('Sync to API failed', e);
   }
@@ -342,7 +333,6 @@ async function saveMedia(){
     setTimeout(()=>$('#mediaStatus').textContent='',2000);
     return;
   }
-  // try send to API
   if(typeof API_URL !== 'undefined' && API_URL){
     try{
       const res = await fetch(API_URL, {
@@ -352,7 +342,6 @@ async function saveMedia(){
       if(res.ok){ $('#mediaStatus').textContent = 'Media tersimpan di server.'; setTimeout(()=>$('#mediaStatus').textContent='',2500); return; }
     } catch(e){ console.warn('saveMedia -> API fail', e); }
   }
-  // fallback: persist in localStorage already done by preview
   $('#mediaStatus').textContent = 'Perubahan tersimpan lokal (belum diupload ke server).';
   setTimeout(()=>$('#mediaStatus').textContent='',3000);
 }
@@ -368,7 +357,12 @@ function loadContact(){
 async function saveContact(e){
   e.preventDefault();
   const data = { wa:$('#inpWA').value.trim(), email:$('#inpEmail').value.trim(), rek:$('#inpRek').value.trim(), desc:$('#inpDesc').value.trim() };
-  // try API
+  // validasi
+  if(!data.wa || !data.email){
+    $('#contactStatus').textContent = 'WhatsApp & Email wajib diisi!';
+    setTimeout(()=>{$('#contactStatus').textContent=''},2000);
+    return;
+  }
   if(typeof API_URL !== 'undefined' && API_URL){
     try{
       const r = await fetch(API_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ action:'saveContact', contact: data }) });
@@ -377,7 +371,7 @@ async function saveContact(e){
   }
   localStorage.setItem(CONTACT_KEY, JSON.stringify(data));
   $('#contactStatus').textContent = 'Kontak tersimpan lokal (belum diupload).';
-  setTimeout(()=>$('#contactStatus').textContent='',2500);
+  setTimeout(()=>{$('#contactStatus').textContent=''},2500);
 }
 function resetContactForm(){
   localStorage.removeItem(CONTACT_KEY);
@@ -386,7 +380,6 @@ function resetContactForm(){
 
 /* ---------- ORDERS (demo) ---------- */
 function loadOrders(){
-  // try API
   (async () => {
     try {
       if(typeof API_URL !== 'undefined' && API_URL){
@@ -424,14 +417,4 @@ function updateStats(totalProducts=0){
   // demo values
   $('#statOrders').textContent = 5;
   $('#statUsers').textContent = 42;
-}
-
-/* ---------- UTIL ---------- */
-function toBase64(file){
-  return new Promise((res, rej)=>{
-    const fr = new FileReader();
-    fr.onload = () => res(fr.result);
-    fr.onerror = () => rej('err');
-    fr.readAsDataURL(file);
-  });
 }
