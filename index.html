@@ -1,117 +1,146 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery Mbun – Handmade Elegance</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="img/logo.png">
-  <script defer src="script.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gallery Mbun — Eksplorasi keindahan handmade premium, kerajinan elegan dengan sentuhan artistik dari Mojokerto.">
+  <meta name="keywords" content="Gallery Mbun, Handmade, Craft, Kerajinan, Mojokerto, Produk Lokal">
+  <meta name="author" content="Gallery Mbun">
+  <title>Gallery Mbun</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="icon" href="assets/logo.webp" type="image/webp">
 </head>
+
 <body>
 
-  <!-- HEADER -->
-  <header>
-    <div class="container nav">
-      <a href="#" class="logo">
-        <img src="img/logo.png" class="logo-img" alt="Gallery Mbun">
-        <span>Gallery Mbun</span>
-      </a>
-      <button class="nav-toggle" id="navToggle">&#9776;</button>
-      <nav>
-        <ul id="navMenu">
-          <li><a href="#home">Beranda</a></li>
-          <li><a href="#koleksi">Koleksi</a></li>
-          <li><a href="#about">Tentang</a></li>
-          <li><a href="#kontak">Kontak</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- BANNER -->
-  <section class="banner" id="home">
-    <div class="banner-text animate-fade">
-      <h1>Elegan. Hangat. <span class="highlight">Berarti.</span></h1>
-      <p>Setiap karya Gallery Mbun membawa kisah dan keindahan dari hati para perajin.</p>
-      <a href="#koleksi" class="btn">Lihat Koleksi</a>
-    </div>
-  </section>
-
-  <!-- KOLEKSI -->
-  <section class="products" id="koleksi">
-    <h2 class="animate-fade">Koleksi Unggulan</h2>
-    <div class="product-grid">
-      <div class="product-card animate-up" data-title="Mini Frame Floral" data-desc="Rangkaian bunga kering dalam frame kayu elegan." data-price="Rp 75.000" data-img="img/produk1.jpg">
-        <img src="img/produk1.jpg" alt="Produk 1">
-        <h3>Mini Frame Floral</h3>
-        <p class="price">Rp 75.000</p>
-      </div>
-      <div class="product-card animate-up" data-title="Candle Aroma Vanilla" data-desc="Lilin aroma lembut vanilla dengan sentuhan hangat." data-price="Rp 55.000" data-img="img/produk2.jpg">
-        <img src="img/produk2.jpg" alt="Produk 2">
-        <h3>Candle Aroma Vanilla</h3>
-        <p class="price">Rp 55.000</p>
-      </div>
-      <div class="product-card animate-up" data-title="Keychain Clay Art" data-desc="Gantungan imut handmade dari clay." data-price="Rp 25.000" data-img="img/produk3.jpg">
-        <img src="img/produk3.jpg" alt="Produk 3">
-        <h3>Keychain Clay Art</h3>
-        <p class="price">Rp 25.000</p>
-      </div>
-      <div class="product-card animate-up" data-title="Gift Box Custom" data-desc="Paket hadiah spesial dengan personalisasi unik." data-price="Rp 120.000" data-img="img/produk4.jpg">
-        <img src="img/produk4.jpg" alt="Produk 4">
-        <h3>Gift Box Custom</h3>
-        <p class="price">Rp 120.000</p>
-      </div>
-    </div>
-    <div class="pdf-section animate-fade">
-      <button class="btn" id="downloadPDF">📄 Unduh Katalog PDF</button>
-    </div>
-  </section>
-
-  <!-- ABOUT -->
-  <section class="about" id="about">
-    <h2 class="animate-fade">Tentang Kami</h2>
-    <div class="container about-flex">
-      <img src="img/about.jpg" alt="Tentang Kami" class="about-img animate-left">
-      <div class="about-text animate-right">
-        <p><b>Gallery Mbun</b> adalah ruang bagi keindahan yang lembut dan alami.  
-          Kami percaya bahwa seni adalah cermin hati, dan setiap karya kami dibuat dengan cinta serta kesabaran.
-        </p>
-        <p><i>"Kami tidak hanya menjual produk, tapi menghadirkan rasa."</i></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- KONTAK -->
-  <section class="contact" id="kontak">
-    <h2 class="animate-fade">Hubungi Kami</h2>
-    <ul class="animate-up">
-      <li><b>Alamat:</b> Jl. Pekayon No.39, Kota Mojokerto</li>
-      <li><b>Email:</b> gallerymbun@gmail.com</li>
-      <li><b>Telepon:</b> 0812-3456-7890</li>
+  <!-- ====== NAVBAR ====== -->
+  <nav class="navbar">
+    <div class="logo">Gallery Mbun</div>
+    <ul>
+      <li><a href="#home" class="active">Beranda</a></li>
+      <li><a href="#produk">Produk</a></li>
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#kontak">Kontak</a></li>
     </ul>
-    <div class="social-media animate-fade">
-      <a href="https://wa.me/6281234567890" target="_blank"><img src="img/wa.svg" alt="WhatsApp" width="32"></a>
-      <a href="https://instagram.com/gallerymbun" target="_blank"><img src="img/ig.svg" alt="Instagram" width="32"></a>
+  </nav>
+
+  <!-- ====== HERO SECTION ====== -->
+  <section id="home" class="hero">
+    <div class="hero-content">
+      <h1>Elegansi dalam Setiap Sentuhan</h1>
+      <p>Gallery Mbun menghadirkan karya handmade penuh keindahan — memadukan estetika, ketelitian, dan makna dalam setiap produk yang diciptakan dengan cinta.</p>
+      <button class="btn-primary" onclick="document.getElementById('produk').scrollIntoView({behavior:'smooth'})">
+        Lihat Koleksi
+      </button>
+    </div>
+    <div class="hero-image">
+      <img src="assets/hero-banner.jpg" alt="Gallery Mbun Hero Image">
     </div>
   </section>
 
-  <!-- FOOTER -->
-  <footer>
-    <p>© 2025 Gallery Mbun. Cinta dalam setiap detail.</p>
+  <!-- ====== PRODUK SECTION ====== -->
+  <section id="produk">
+    <div class="section-title">
+      <h2>Koleksi Unggulan</h2>
+      <p>Temukan keindahan di setiap detail. Semua produk kami dibuat dengan tangan dan penuh cinta oleh pengrajin lokal.</p>
+    </div>
+
+    <div class="products">
+      <!-- === Card 1 === -->
+      <div class="product-card">
+        <img src="assets/product1.jpg" alt="Produk 1">
+        <div class="product-info">
+          <h3>Vas Keramik Premium</h3>
+          <p>Sentuhan lembut warna biru laut yang tenang, cocok untuk ruang tamu atau meja kerja.</p>
+          <div class="price">Rp 185.000</div>
+        </div>
+      </div>
+
+      <!-- === Card 2 === -->
+      <div class="product-card">
+        <img src="assets/product2.jpg" alt="Produk 2">
+        <div class="product-info">
+          <h3>Totebag Anyaman Alam</h3>
+          <p>Desain natural dan ringan, dibuat dari bahan serat alami yang ramah lingkungan.</p>
+          <div class="price">Rp 120.000</div>
+        </div>
+      </div>
+
+      <!-- === Card 3 === -->
+      <div class="product-card">
+        <img src="assets/product3.jpg" alt="Produk 3">
+        <div class="product-info">
+          <h3>Lampu Hias Rotan</h3>
+          <p>Pancarkan suasana hangat dan nyaman di setiap ruangan dengan cahaya alami.</p>
+          <div class="price">Rp 245.000</div>
+        </div>
+      </div>
+
+      <!-- === Card 4 === -->
+      <div class="product-card">
+        <img src="assets/product4.jpg" alt="Produk 4">
+        <div class="product-info">
+          <h3>Cangkir Motif Batik</h3>
+          <p>Unik dan eksklusif, menghadirkan pesona budaya Nusantara di setiap tegukan.</p>
+          <div class="price">Rp 95.000</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====== TENTANG SECTION ====== -->
+  <section id="tentang" style="background: var(--light); padding: 80px 8%;">
+    <div class="section-title">
+      <h2>Tentang Gallery Mbun</h2>
+      <p>Kami adalah komunitas kreatif dari Mojokerto yang berfokus pada karya handmade eksklusif. Setiap produk diciptakan untuk membawa cerita, kehangatan, dan nilai estetika bagi penggunanya.</p>
+    </div>
+  </section>
+
+  <!-- ====== KONTAK SECTION ====== -->
+  <section id="kontak" style="padding: 80px 8%;">
+    <div class="section-title">
+      <h2>Hubungi Kami</h2>
+      <p>Ingin memesan atau bekerja sama? Jangan ragu untuk menghubungi kami melalui kontak di bawah ini.</p>
+    </div>
+    <div style="text-align:center;">
+      <p><strong>Email:</strong> <a href="mailto:gallerymbun@gmail.com">gallerymbun@gmail.com</a></p>
+      <p><strong>Instagram:</strong> <a href="https://instagram.com/gallerymbun" target="_blank">@gallerymbun</a></p>
+      <p><strong>Alamat:</strong> Jl. Pekayon No.39, Kota Mojokerto</p>
+    </div>
+  </section>
+
+  <!-- ====== FOOTER ====== -->
+  <footer class="footer">
+    <div class="col">
+      <h3>Gallery Mbun</h3>
+      <p>Menampilkan karya handmade elegan dan bermakna dari tangan kreatif Mojokerto.</p>
+    </div>
+    <div class="col">
+      <h3>Menu</h3>
+      <p><a href="#home">Beranda</a></p>
+      <p><a href="#produk">Produk</a></p>
+      <p><a href="#tentang">Tentang</a></p>
+      <p><a href="#kontak">Kontak</a></p>
+    </div>
+    <div class="col">
+      <h3>Ikuti Kami</h3>
+      <p><a href="https://instagram.com/gallerymbun" target="_blank">Instagram</a></p>
+      <p><a href="#">Facebook</a></p>
+    </div>
+    <div class="footer-bottom">
+      © 2025 Gallery Mbun. Semua hak dilindungi.
+    </div>
   </footer>
 
-  <!-- POPUP DETAIL PRODUK -->
-  <div class="popup" id="productPopup">
-    <div class="popup-content">
-      <span class="close">&times;</span>
-      <img id="popupImg" alt="Detail Produk">
-      <h3 id="popupTitle"></h3>
-      <p id="popupDesc"></p>
-      <p id="popupPrice" class="price"></p>
-      <a href="https://wa.me/6281234567890" target="_blank" class="btn">Pesan Sekarang</a>
-    </div>
-  </div>
-
+  <!-- ====== SMOOTH SCROLLING JS ====== -->
+  <script>
+    const navLinks = document.querySelectorAll('.navbar ul li a');
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        navLinks.forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
