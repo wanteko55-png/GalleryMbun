@@ -1,5 +1,5 @@
 // admin.js - Final Terhubung Google Sheets API
-const API_URL = "PASTE_URL_WEBAPP_MU_DI_SINI"; // ← Ganti ini
+const API_URL = "https://script.google.com/macros/s/AKfycbwbNCiLWQAd4IJE3EG91gsp6TARrEoe6J8lVysFq0VOpknJs04MKCYbCnTwPy6qVpKI/exec"; // ← Ganti ini
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
