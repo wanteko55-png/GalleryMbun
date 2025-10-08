@@ -1,265 +1,190 @@
-// ===============================
-// admin.js — versi final (Gallery Mbun Admin Panel)
-// Koneksi penuh ke Google Sheets via Apps Script WebApp
-// ===============================
+// admin.js - Final Terhubung Google Sheets API
+const API_URL = "PASTE_URL_WEBAPP_MU_DI_SINI"; // ← Ganti ini
 
-// --- utilitas cepat ---
-const $ = sel => document.querySelector(sel);
-const $$ = sel => Array.from(document.querySelectorAll(sel));
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
 
-// --- kunci auth di localStorage ---
-const ADMIN_KEY = 'gm_admin_auth';
+const ADMIN_KEY = "gm_admin_auth";
 
-/* =======================================================
-   1. INISIALISASI
-======================================================= */
-document.addEventListener('DOMContentLoaded', () => {
+/* =============== INIT =============== */
+document.addEventListener("DOMContentLoaded", () => {
   setupAuthUI();
+  $("#formLogin").addEventListener("submit", handleLogin);
+  $("#btnLogout").addEventListener("click", handleLogout);
+  $("#btnAddProduct").addEventListener("click", openAddProduct);
+  $("#btnReloadProducts").addEventListener("click", loadProducts);
+  $("#formProduct").addEventListener("submit", handleSaveProduct);
+  $("#btnCloseModal").addEventListener("click", () => closeModal($("#modalProduct")));
 
-  // tombol umum
-  $('#btnOpenLogin')?.addEventListener('click', () => showModal('#modalLogin'));
-  $('#btnCloseLogin')?.addEventListener('click', () => closeModal('#modalLogin'));
-  $('#btnLogout')?.addEventListener('click', logoutAdmin);
-
-  // navigasi
-  $$('.admin-link').forEach(a => a.addEventListener('click', onNavClick));
-
-  // produk
-  $('#btnAddProduct')?.addEventListener('click', openAddProduct);
-  $('#btnReloadProducts')?.addEventListener('click', loadProducts);
-  $('#formProduct')?.addEventListener('submit', handleSaveProduct);
-  $('#btnCloseModal')?.addEventListener('click', () => closeModal('#modalProduct'));
-
-  // login
-  $('#formLogin')?.addEventListener('submit', handleLogin);
-
-  // muat data awal
-  loadProducts();
+  if (isLoggedIn()) loadProducts();
 });
 
-/* =======================================================
-   2. AUTENTIKASI ADMIN
-======================================================= */
+/* =============== AUTH =============== */
 function isLoggedIn() {
   return !!localStorage.getItem(ADMIN_KEY);
 }
-
 function getAdminEmail() {
-  try {
-    return JSON.parse(localStorage.getItem(ADMIN_KEY)).email || '';
-  } catch {
-    return '';
-  }
+  try { return JSON.parse(localStorage.getItem(ADMIN_KEY)).email; } catch { return ""; }
 }
 
 function setupAuthUI() {
   if (isLoggedIn()) {
-    $('#admin-logged').style.display = 'flex';
-    $('#admin-login-area').style.display = 'none';
-    $('#adminEmailLabel').textContent = getAdminEmail();
+    $("#admin-login-area").style.display = "none";
+    $("#admin-logged").style.display = "flex";
+    $("#adminEmailLabel").textContent = getAdminEmail();
   } else {
-    $('#admin-logged').style.display = 'none';
-    $('#admin-login-area').style.display = 'flex';
+    $("#admin-login-area").style.display = "flex";
+    $("#admin-logged").style.display = "none";
   }
 }
 
-function logoutAdmin() {
+async function handleLogin(e) {
+  e.preventDefault();
+  const email = $("#loginEmail").value.trim();
+  const password = $("#loginPass").value.trim();
+
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "verifyAdminLogin", email, password })
+    });
+    const json = await res.json();
+    if (json.success) {
+      localStorage.setItem(ADMIN_KEY, JSON.stringify({ email: json.email }));
+      setupAuthUI();
+      loadProducts();
+    } else {
+      $("#loginStatus").textContent = json.message;
+      setTimeout(() => $("#loginStatus").textContent = "", 3000);
+    }
+  } catch (err) {
+    $("#loginStatus").textContent = "Koneksi gagal ke server!";
+  }
+}
+
+function handleLogout() {
   localStorage.removeItem(ADMIN_KEY);
   setupAuthUI();
 }
 
-/* =======================================================
-   3. LOGIN (TERHUBUNG KE CODE.GS)
-======================================================= */
-function handleLogin(e) {
-  e.preventDefault();
-  const email = $('#loginEmail').value.trim();
-  const pass = $('#loginPass').value.trim();
+/* =============== MODAL =============== */
+function showModal(el) { el.classList.remove("hidden"); }
+function closeModal(el) { el.classList.add("hidden"); }
 
-  if (!email || !pass) {
-    $('#loginStatus').textContent = 'Isi email & password!';
-    return;
+/* =============== CRUD PRODUK =============== */
+async function loadProducts() {
+  try {
+    const res = await fetch(`${API_URL}?action=getProducts`);
+    const json = await res.json();
+    if (json.success) {
+      renderProducts(json.data);
+    } else {
+      setDashboardStatus(json.message);
+    }
+  } catch {
+    setDashboardStatus("Gagal memuat data produk");
   }
-
-  $('#loginStatus').textContent = 'Memeriksa...';
-
-  // panggil Apps Script backend
-  google.script.run
-    .withSuccessHandler((res) => {
-      if (res.success) {
-        localStorage.setItem(ADMIN_KEY, JSON.stringify({ email: res.email }));
-        $('#loginStatus').textContent = '';
-        closeModal('#modalLogin');
-        setupAuthUI();
-        loadProducts();
-      } else {
-        $('#loginStatus').textContent = res.message || 'Login gagal!';
-      }
-    })
-    .withFailureHandler(() => {
-      $('#loginStatus').textContent = 'Tidak dapat terhubung ke server.';
-    })
-    .verifikasiLoginAdmin(email, pass); // fungsi di Code.gs
-}
-
-/* =======================================================
-   4. NAVIGASI ANTAR PANEL
-======================================================= */
-function onNavClick(e) {
-  e.preventDefault();
-  const target = e.currentTarget.dataset.target;
-  $$('.panel').forEach(p => p.classList.add('hidden'));
-  $(`#${target}`).classList.remove('hidden');
-  $$('.admin-link').forEach(a => a.classList.remove('active'));
-  e.currentTarget.classList.add('active');
-}
-
-/* =======================================================
-   5. PRODUK CRUD (TERHUBUNG KE CODE.GS)
-======================================================= */
-function loadProducts() {
-  if (!isLoggedIn()) return;
-
-  setDashboardStatus('Memuat data produk...');
-
-  google.script.run
-    .withSuccessHandler((data) => {
-      renderProducts(data || []);
-      updateStats(data.length);
-      setDashboardStatus('');
-    })
-    .withFailureHandler(() => {
-      setDashboardStatus('Gagal memuat data dari Google Sheets.');
-    })
-    .getProducts(); // fungsi di Code.gs
 }
 
 function renderProducts(items) {
-  const tbody = $('#tableProducts tbody');
-  tbody.innerHTML = '';
-  if (!items.length) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;">Belum ada data produk</td></tr>`;
-    return;
-  }
-
-  items.forEach((it, idx) => {
-    const tr = document.createElement('tr');
+  const tbody = $("#tableProducts tbody");
+  tbody.innerHTML = "";
+  items.forEach((it, i) => {
+    const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${escapeHtml(it.ProductName || '')}</td>
-      <td>${escapeHtml(it.Description || '')}</td>
-      <td>${escapeHtml(it.Price || '')}</td>
-      <td>${escapeHtml(it.Category || '')}</td>
-      <td>${escapeHtml(it.Type || '')}</td>
-      <td>${escapeHtml(it.Status || '')}</td>
+      <td>${it.ID || i + 1}</td>
+      <td>${it.ProductName || ""}</td>
+      <td>${it.Description || ""}</td>
+      <td>${it.Price || ""}</td>
+      <td>${it.Category || ""}</td>
+      <td>${it.Type || ""}</td>
+      <td>${it.Status || ""}</td>
       <td>
-        <button class="btn small" data-idx="${idx}" data-action="edit">Edit</button>
-        <button class="btn small cancel" data-idx="${idx}" data-action="delete">Hapus</button>
+        <button class="btn small" onclick="openEditProduct(${encodeURIComponent(JSON.stringify(it))})">Edit</button>
+        <button class="btn small cancel" onclick="deleteProduct('${it.ID}')">Hapus</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
-
-  $$('#tableProducts button').forEach(btn => {
-    btn.addEventListener('click', (ev) => {
-      const idx = Number(ev.currentTarget.dataset.idx);
-      const action = ev.currentTarget.dataset.action;
-      if (action === 'edit') openEditProduct(items[idx]);
-      if (action === 'delete') deleteProduct(items[idx]);
-    });
-  });
 }
 
 function openAddProduct() {
-  $('#modalTitle').textContent = 'Tambah Produk';
-  $('#prodId').value = '';
-  $('#formProduct').reset();
-  $('#productStatus').textContent = '';
-  showModal('#modalProduct');
+  $("#modalTitle").textContent = "Tambah Produk";
+  $("#prodId").value = "";
+  $("#formProduct").reset();
+  $("#productStatus").textContent = "";
+  showModal($("#modalProduct"));
 }
 
-function openEditProduct(product) {
-  $('#modalTitle').textContent = 'Edit Produk';
-  $('#prodId').value = product.ID || '';
-  $('#prodName').value = product.ProductName || '';
-  $('#prodDesc').value = product.Description || '';
-  $('#prodPrice').value = product.Price || '';
-  $('#prodCategory').value = product.Category || '';
-  $('#prodType').value = product.Type || 'Digital';
-  $('#prodStatus').value = product.Status || 'Active';
-  $('#productStatus').textContent = '';
-  showModal('#modalProduct');
+function openEditProduct(it) {
+  const p = typeof it === "string" ? JSON.parse(decodeURIComponent(it)) : it;
+  $("#modalTitle").textContent = "Edit Produk";
+  $("#prodId").value = p.ID || "";
+  $("#prodName").value = p.ProductName || "";
+  $("#prodDesc").value = p.Description || "";
+  $("#prodPrice").value = p.Price || "";
+  $("#prodCategory").value = p.Category || "";
+  $("#prodType").value = p.Type || "Digital";
+  $("#prodStatus").value = p.Status || "Active";
+  $("#productStatus").textContent = "";
+  showModal($("#modalProduct"));
 }
 
-function handleSaveProduct(e) {
+async function handleSaveProduct(e) {
   e.preventDefault();
-
-  const data = {
-    ID: $('#prodId').value,
-    ProductName: $('#prodName').value.trim(),
-    Description: $('#prodDesc').value.trim(),
-    Price: $('#prodPrice').value.trim(),
-    Category: $('#prodCategory').value.trim(),
-    Type: $('#prodType').value,
-    Status: $('#prodStatus').value
+  const prod = {
+    ID: $("#prodId").value,
+    ProductName: $("#prodName").value.trim(),
+    Description: $("#prodDesc").value.trim(),
+    Price: $("#prodPrice").value.trim(),
+    Category: $("#prodCategory").value.trim(),
+    Type: $("#prodType").value,
+    Status: $("#prodStatus").value
   };
 
-  // validasi
-  if (!data.ProductName || !data.Description || !data.Price || !data.Category) {
-    $('#productStatus').textContent = 'Semua field wajib diisi!';
-    setTimeout(() => $('#productStatus').textContent = '', 2000);
+  if (!prod.ProductName || !prod.Description || !prod.Price) {
+    $("#productStatus").textContent = "Semua field wajib diisi!";
     return;
   }
 
-  $('#productStatus').textContent = 'Menyimpan...';
-
-  const action = data.ID ? 'updateProduct' : 'addProduct';
-  google.script.run
-    .withSuccessHandler((ok) => {
-      if (ok) {
-        closeModal('#modalProduct');
-        loadProducts();
-      } else {
-        $('#productStatus').textContent = 'Gagal menyimpan!';
-      }
-    })
-    .withFailureHandler(() => {
-      $('#productStatus').textContent = 'Tidak bisa konek server!';
-    })[action](data); // panggil addProduct/updateProduct di Code.gs
+  try {
+    const action = prod.ID ? "updateProduct" : "addProduct";
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, product: prod })
+    });
+    const json = await res.json();
+    if (json.success) {
+      closeModal($("#modalProduct"));
+      loadProducts();
+    } else {
+      $("#productStatus").textContent = json.message;
+    }
+  } catch {
+    $("#productStatus").textContent = "Gagal menyimpan ke Google Sheet!";
+  }
 }
 
-function deleteProduct(product) {
-  if (!confirm('Hapus produk ini?')) return;
-
-  google.script.run
-    .withSuccessHandler((ok) => {
-      if (ok) loadProducts();
-      else alert('Gagal hapus data.');
-    })
-    .withFailureHandler(() => alert('Tidak bisa konek server!'))
-    .deleteProduct(product.ID);
+async function deleteProduct(id) {
+  if (!confirm("Yakin hapus produk ini?")) return;
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "deleteProduct", id })
+    });
+    const json = await res.json();
+    if (json.success) loadProducts();
+    else alert(json.message);
+  } catch {
+    alert("Koneksi gagal!");
+  }
 }
 
-/* =======================================================
-   6. UTILITAS
-======================================================= */
-function showModal(sel) {
-  const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
-  el.classList.remove('hidden');
-}
-function closeModal(sel) {
-  const el = typeof sel === 'string' ? document.querySelector(sel) : sel;
-  el.classList.add('hidden');
-}
-function escapeHtml(s) {
-  return (s + '').replace(/[&<>"']/g, c => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-  }[c]));
-}
+/* =============== DASHBOARD =============== */
 function setDashboardStatus(msg) {
-  const el = document.getElementById('dashboardStatus');
-  if (el) el.textContent = msg || '';
-}
-function updateStats(count) {
-  const el = document.getElementById('totalProducts');
-  if (el) el.textContent = count;
+  const el = $("#dashboardStatus");
+  if (el) el.textContent = msg;
 }
