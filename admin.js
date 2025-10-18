@@ -83,9 +83,9 @@ function handleLogin(e) {
 
   $('#loginStatus').textContent = 'Memeriksa...';
 
-  // panggil Apps Script backend
   google.script.run
     .withSuccessHandler((res) => {
+      console.log('Respon login:', res);
       if (res.success) {
         localStorage.setItem(ADMIN_KEY, JSON.stringify({ email: res.email }));
         $('#loginStatus').textContent = '';
@@ -96,10 +96,11 @@ function handleLogin(e) {
         $('#loginStatus').textContent = res.message || 'Login gagal!';
       }
     })
-    .withFailureHandler(() => {
+    .withFailureHandler((err) => {
+      console.error('Gagal terhubung ke Apps Script:', err);
       $('#loginStatus').textContent = 'Tidak dapat terhubung ke server.';
     })
-    .verifikasiLoginAdmin(email, pass); // fungsi di Code.gs
+    .verifikasiLoginAdmin(email, pass);
 }
 
 /* =======================================================
